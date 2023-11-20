@@ -12,23 +12,15 @@ import (
 func Router() (*mux.Router, *socketio.Server) {
 	var r *mux.Router = mux.NewRouter()
 
-	// r.Methods("OPTIONS").HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-	// 	w.Header().Set("Access-Control-Allow-Origin", "")
-	// 	w.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT,DELETE")
-	// 	w.Header().Set("Access-Control-Allow-Headers", "Accept, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization, Access-Control-Request-Headers, Access-Control-Request-Method, Connection, Host, Origin, User-Agent, Referer, Cache-Control, X-header")
-	// })
-
 	r.HandleFunc("/check-room", controllers.CheckRoom).Methods("POST")
 	r.HandleFunc("/get-running-sessions/{email}", controllers.GetRunningSessions).Methods("GET")
 	r.HandleFunc("/check-session-id/{roomId}", controllers.CheckSessionId).Methods("GET")
-	r.HandleFunc("/get-players", controllers.GetPlayers).Methods("GET")
 	r.HandleFunc("/verify-player-count", controllers.CheckPlayerCount).Methods("POST")
 	r.HandleFunc("/submit", controllers.HandleSubmit).Methods("POST")
 	r.HandleFunc("/send-chat", controllers.SendChat).Methods("PATCH")
 	r.HandleFunc("/get-chats/{roomId}", controllers.GetChats).Methods("GET")
 	r.HandleFunc("/quit/{roomId}/{playerEmail}/{playerIndex}", controllers.HandleQuit).Methods("DELETE")
 	r.HandleFunc("/add-review", controllers.AddReview).Methods("POST")
-	// r.HandleFunc("/get-reviews", controllers.GetReviews).Methods("GET")
 
 	socketServer := helpers.WebSocket()
 	r.Handle("/socket.io/", socketServer)
